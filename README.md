@@ -22,3 +22,7 @@ The `Terraform` folder contains the code necessary to deploy the Azure Kubernete
 
 The `azure-pipelines-terraform.yml` file is a YAML file for continuous integration and continuous delivery of the Terraform IaC.
 The `azure-pipelines-test.yml` file is a YAML file for testing Azure DevOps pipelines on multiple containers.
+
+## Thesis
+
+The `Thesis` folder contains my Master 1 thesis written in French for my school Efrei Paris.
