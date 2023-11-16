@@ -1,0 +1,29 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: {{ .Release.Name }}-pipeline-trigger-auth
+  namespace: devopsagent
+spec:
+  secretTargetRef:
+    - parameter: personalAccessToken
+      name: {{ .Release.Name }}-pipeline-auth
+      key: AZP_TOKEN
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Release.Name }}-pipelines-scaledobject
+  namespace: devopsagent
+spec:
+  scaleTargetRef:
+    name: {{ .Release.Name }}-agent
+  minReplicaCount: 1
+  maxReplicaCount: {{ .Values.maxReplicaCount }}
+  cooldownPeriod: 3
+  triggers:
+    - type: azure-pipelines
+      metadata:
+        poolID: "{{ .Values.poolID }}"
+        organizationURLFromEnv: "AZP_URL"
+      authenticationRef:
+        name: {{ .Release.Name }}-pipeline-trigger-auth

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment # Deployment of the azure devops agent on Ubuntu containers
+metadata:
+  name: {{ .Release.Name }}-agent
+  namespace: devopsagent
+  labels:
+    app: {{ .Values.labels.app }}-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.labels.app }}-agent
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.labels.app }}-agent
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-agent
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+            - name: AZP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-pipeline-auth
+                  key: AZP_URL
+            - name: AZP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-pipeline-auth
+                  key: AZP_TOKEN
+            - name: AZP_POOL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-pipeline-auth
+                  key: AZP_POOL
+          volumeMounts:
+            - mountPath: /var/run/docker.sock
+              name: docker-volume
+      volumes:
+        - name: docker-volume
+          hostPath:
+            path: /var/run/docker.sock

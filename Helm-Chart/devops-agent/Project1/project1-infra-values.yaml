@@ -1,0 +1,9 @@
+labels:
+  app: TO_BE_DEFINED
+
+image:
+  repository: TO_BE_DEFINED.azurecr.io/TO_BE_DEFINED
+  tag: TO_BE_DEFINED
+
+data:
+  azp_pool: TO_BE_DEFINED
